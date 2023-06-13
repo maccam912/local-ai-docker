@@ -17,8 +17,8 @@ def get_suggestions() -> List[str]:
     suggestions = []
     tries = 0
     suggestions_str = ""
-    while len(suggestions) != 3 and tries < 3:
-        prompt = "Suggest five short phrases (three words or less) to continue the story. Write them out one phrase per line, no extra text before or after."
+    while len(suggestions) != 5 and tries < 3:
+        prompt = "Suggest five sentences to continue the story. Write them out one phrase per line, no extra text before or after."
         st.session_state["messages"] += [{"role": "user", "content": prompt}]
 
         response = openai.ChatCompletion.create(
