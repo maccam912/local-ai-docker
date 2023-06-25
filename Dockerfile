@@ -1,7 +1,11 @@
-FROM python:3.11
-RUN curl -sSL https://raw.githubusercontent.com/pdm-project/pdm/main/install-pdm.py | python3 -
+FROM python:3.11 as build
 WORKDIR /app
-COPY . .
-RUN /root/.local/bin/pdm install
-EXPOSE 8501
-CMD /root/.local/bin/pdm run streamlit run main.py
+RUN git clone https://github.com/go-skynet/LocalAI
+WORKDIR /app/LocalAI
+RUN apt-get update && apt-get install -y golang cmake
+RUN make build
+FROM python:3.11 as deploy
+COPY --from=build /app/LocalAI/local-ai /app/LocalAI/local-ai
+WORKDIR /app/LocalAI
+EXPOSE 8080
+CMD ./local-ai
